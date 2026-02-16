@@ -16,8 +16,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'test@test.com');
+  final _passwordController = TextEditingController(text: '123456');
   bool _isLoading = false;
 
   @override
@@ -74,18 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.security, size: 80, color: Color(0xFF059669)),
-                  const SizedBox(height: 24),
-                  Text(
-                    l10n.appName,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.outfit(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF0F172A),
-                    ),
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 120,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 24),
+
                   Text(
                     l10n.loginTitle,
                     textAlign: TextAlign.center,

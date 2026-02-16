@@ -42,6 +42,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  height: 100,
+                ),
+              ),
+              const SizedBox(height: 32),
               Text(
                 l10n.resetPassword,
                 style: GoogleFonts.outfit(

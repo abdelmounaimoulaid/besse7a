@@ -79,6 +79,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 100,
+                  ),
+                  const SizedBox(height: 24),
                   Text(
                     l10n.createAccount,
                     textAlign: TextAlign.center,

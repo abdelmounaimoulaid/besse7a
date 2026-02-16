@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,20 +15,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  /* 
-  // Try to initialize Firebase
-  try {
-    // If you have generated firebase_options.dart, verify it exists. 
-    // Otherwise this might just fail or we use the default fallback.
-    // For now, we wrap in try-catch to allow the app to run even if not fully configured yet.
-    await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform, // Uncomment if you have options
-    );
-  } catch (e) {
-    debugPrint("Firebase initialization failed (expected if not configured): $e");
-    // Continue running app - AuthProvider handles fallback or errors
-  }
-  */
+
 
   runApp(const FoodCheckerApp());
 }
