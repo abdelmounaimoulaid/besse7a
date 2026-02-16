@@ -78,25 +78,45 @@ class AuthService {
         body: json.encode({'email': email, 'password': password}),
       );
 
+      if (kDebugMode) {
+        print('Login response status: ${response.statusCode}');
+        print('Login response body: ${response.body}');
+      }
+
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final token = data['access_token'];
-        await _saveToken(token);
-        
-        final user = UserModel(
-          uid: data['user']['id'].toString(),
-          email: data['user']['email'],
-          displayName: data['user']['name'],
-        );
-        _userController.add(user);
-        return user;
+        try {
+          final data = json.decode(response.body);
+          final token = data['access_token'];
+          await _saveToken(token);
+          
+          final user = UserModel(
+            uid: data['user']['id'].toString(),
+            email: data['user']['email'],
+            displayName: data['user']['name'],
+          );
+          _userController.add(user);
+          return user;
+        } catch (e) {
+          if (kDebugMode) print('Error parsing login response: $e');
+          throw Exception('Invalid response from server. Please check your backend configuration.');
+        }
       } else {
-        final error = json.decode(response.body);
-        throw Exception(error['message'] ?? 'Login failed');
+        try {
+          final error = json.decode(response.body);
+          throw Exception(error['message'] ?? 'Login failed');
+        } catch (e) {
+          if (e is FormatException) {
+            throw Exception('Server error: Unable to connect to backend. Please ensure the backend is running at ${ApiConfig.baseUrl}');
+          }
+          rethrow;
+        }
       }
     } catch (e) {
       if (kDebugMode) print('Login error: $e');
-      rethrow;
+      if (e is Exception) {
+        rethrow;
+      }
+      throw Exception('Network error: ${e.toString()}');
     }
   }
 
@@ -121,25 +141,45 @@ class AuthService {
         }),
       );
 
+      if (kDebugMode) {
+        print('Register response status: ${response.statusCode}');
+        print('Register response body: ${response.body}');
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = json.decode(response.body);
-        final token = data['access_token'];
-        await _saveToken(token);
-        
-        final user = UserModel(
-          uid: data['user']['id'].toString(),
-          email: data['user']['email'],
-          displayName: data['user']['name'],
-        );
-        _userController.add(user);
-        return user;
+        try {
+          final data = json.decode(response.body);
+          final token = data['access_token'];
+          await _saveToken(token);
+          
+          final user = UserModel(
+            uid: data['user']['id'].toString(),
+            email: data['user']['email'],
+            displayName: data['user']['name'],
+          );
+          _userController.add(user);
+          return user;
+        } catch (e) {
+          if (kDebugMode) print('Error parsing registration response: $e');
+          throw Exception('Invalid response from server. Please check your backend configuration.');
+        }
       } else {
-        final error = json.decode(response.body);
-        throw Exception(error['message'] ?? 'Registration failed');
+        try {
+          final error = json.decode(response.body);
+          throw Exception(error['message'] ?? 'Registration failed');
+        } catch (e) {
+          if (e is FormatException) {
+            throw Exception('Server error: Unable to connect to backend. Please ensure the backend is running at ${ApiConfig.baseUrl}');
+          }
+          rethrow;
+        }
       }
     } catch (e) {
       if (kDebugMode) print('Registration error: $e');
-      rethrow;
+      if (e is Exception) {
+        rethrow;
+      }
+      throw Exception('Network error: ${e.toString()}');
     }
   }
 
