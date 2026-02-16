@@ -77,6 +77,16 @@ class AppLocalizations {
       'cancel': 'Cancel',
       'ok': 'OK',
       'search': 'Search',
+      'new_password': 'New Password',
+      'reset_success': 'Password reset successfully',
+      'token_label': 'Token / Code',
+      'enter_token': 'Enter the token sent to your email',
+      'verify': 'Verify',
+      'verify_code': 'Verify Code',
+      'resend_code': 'Resend Code',
+      'invalid_code': 'Invalid Code',
+      'enter_6_digit': 'Enter the 6-digit code',
+      'preferences': 'Preferences',
     },
     'ar': {
       // App
@@ -141,7 +151,16 @@ class AppLocalizations {
       'error': 'خطأ',
       'cancel': 'إلغاء',
       'ok': 'موافق',
-      'search': 'بحث',
+      'new_password': 'كلمة المرور الجديدة',
+      'reset_success': 'تم إعادة تعيين كلمة المرور بنجاح',
+      'token_label': 'الرمز / الكود',
+      'enter_token': 'أدخل الرمز المرسل إلى بريدك الإلكتروني',
+      'verify': 'تحقق',
+      'verify_code': 'تحقق من الرمز',
+      'resend_code': 'أعد إرسال الرمز',
+      'invalid_code': 'رمز غير صالح',
+      'enter_6_digit': 'أدخل الرمز المكون من 6 أرقام',
+      'preferences': 'التفضيلات',
     },
   };
 
@@ -165,6 +184,16 @@ class AppLocalizations {
   String get resetPassword => translate('reset_password');
   String get resetPasswordSubtitle => translate('reset_password_subtitle');
   String get sendResetLink => translate('send_reset_link');
+  String get newPassword => translate('new_password');
+  String get resetSuccess => translate('reset_success');
+  String get tokenLabel => translate('token_label');
+  String get enterToken => translate('enter_token');
+  String get verify => translate('verify');
+  String get verifyCode => translate('verify_code');
+  String get resendCode => translate('resend_code');
+  String get invalidCode => translate('invalid_code');
+  String get enter6Digit => translate('enter_6_digit');
+  String get preferences => translate('preferences');
   String get history => translate('history');
   String get scan => translate('scan');
   String get settings => translate('settings');

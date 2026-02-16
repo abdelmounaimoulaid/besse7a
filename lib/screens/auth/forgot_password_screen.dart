@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:mobile_app/screens/auth/verify_code_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -17,14 +20,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> _resetPassword() async {
     if (_emailController.text.isNotEmpty) {
       setState(() => _isLoading = true);
-      await Future.delayed(const Duration(seconds: 2));
+      final l10n = AppLocalizations.of(context);
+      final success = await Provider.of<AuthProvider>(context, listen: false).resetPassword(
+        _emailController.text.trim(),
+        locale: l10n.locale.languageCode,
+      );
+
       if (mounted) {
         setState(() => _isLoading = false);
-        final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.translate('reset_link_sent'))),
-        );
-        Navigator.pop(context);
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(content: Text(l10n.translate('reset_link_sent'))),
+          );
+          
+          // Navigate to Verify Code Screen on success
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerifyCodeScreen(email: _emailController.text.trim()),
+            ),
+          );
+        } else {
+             ScaffoldMessenger.of(context).showSnackBar(
+             const SnackBar(content: Text("Failed to send reset link")),
+          );
+        }
       }
     }
   }
@@ -63,13 +83,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 style: GoogleFonts.outfit(fontSize: 16, color: Colors.grey[600]),
               ),
               const SizedBox(height: 32),
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: l10n.email,
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textAlign: l10n.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    prefixIcon: const Icon(Icons.email_outlined),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

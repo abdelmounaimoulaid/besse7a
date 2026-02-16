@@ -18,6 +18,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
@@ -33,9 +35,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() => _isLoading = true);
       
       try {
+        final l10n = AppLocalizations.of(context);
         final success = await Provider.of<AuthProvider>(context, listen: false).register(
           _emailController.text.trim(),
           _passwordController.text.trim(),
+          _nameController.text.trim(),
+          locale: l10n.locale.languageCode,
         );
 
         if (mounted) {
@@ -110,40 +115,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     validator: (value) => value == null || value.isEmpty ? l10n.translate('please_enter_name') : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: l10n.email,
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textAlign: l10n.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                      decoration: InputDecoration(
+                        labelText: l10n.email,
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      validator: (value) => (value == null || !value.contains('@')) ? l10n.translate('invalid_email') : null,
                     ),
-                    validator: (value) => (value == null || !value.contains('@')) ? l10n.translate('invalid_email') : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: l10n.password,
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      textAlign: l10n.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                      decoration: InputDecoration(
+                        labelText: l10n.password,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      validator: (value) => (value == null || value.length < 6) ? l10n.translate('min_6_chars') : null,
                     ),
-                    validator: (value) => (value == null || value.length < 6) ? l10n.translate('min_6_chars') : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: l10n.confirmPassword,
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      textAlign: l10n.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                      decoration: InputDecoration(
+                        labelText: l10n.confirmPassword,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      validator: (value) {
+                        if (value != _passwordController.text) return l10n.translate('passwords_not_match');
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value != _passwordController.text) return l10n.translate('passwords_not_match');
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 32),
                   ElevatedButton(
